@@ -18,7 +18,7 @@
 
 .Logo {
   width: 720px;
-  height: 390px;
+  height: 304px;
 }
 
 .Game-Icon {
@@ -27,6 +27,7 @@
   border: 1px solid #5ebbcc;
   border-radius: 50px;
   background-color: #5ebbcc;
+  margin-top: 75px;
   margin-right: 25px;
   margin-left: 25px;
 }

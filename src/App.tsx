@@ -1,14 +1,20 @@
 import React from "react";
 import "./App.css";
-import Game from "./components/Game";
-import logo from "./assets/logo.png";
+import Index from "./components/Index";
+import { BrowserRouter, Switch, Route } from "react-router-dom";
+import NotFound from "./components/NotFound";
+import JoinCreate from "./components/JoinCreate";
 
 function App() {
   return (
-    <div className="App">
-      <img src={logo} className="Logo" alt="logo" />
-      <Game />
-    </div>
+    <BrowserRouter>
+      <Switch>
+        <Route path="/" exact component={Index} />
+        <Route path="/joincreate" exact component={JoinCreate} />
+
+        <Route path="/" component={NotFound} />
+      </Switch>
+    </BrowserRouter>
   );
 }
 
