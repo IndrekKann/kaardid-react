@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import LoadingSpinner from "./LoadingSpinner";
 
@@ -32,10 +33,16 @@ const GameButton: React.FC = () => {
           <ul className="games">
             <table>
               {games.map((game) => (
-                <td key={game.id}>
-                  <img src={game.image} className="Game-Icon" alt={game.name} />
-                  <h3>{game.name}</h3>
-                </td>
+                <Link to={`/game/${game.name}`}>
+                  <td key={game.id}>
+                    <img
+                      src={game.image}
+                      className="Game-Icon"
+                      alt={game.name}
+                    />
+                    <h3>{game.name}</h3>
+                  </td>
+                </Link>
               ))}
             </table>
           </ul>
