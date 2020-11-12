@@ -2,26 +2,19 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import LoadingSpinner from "./LoadingSpinner";
+import { IGame } from "../interfaces/IGame";
 
-interface IGameButton {
-  id: string;
-  name: string;
-  image: string;
-}
-
-const defaultGames: IGameButton[] = [];
+const defaultGames: IGame[] = [];
 
 const GameButton: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [games, setGames] = useState(defaultGames);
 
   useEffect(() => {
-    axios
-      .get<IGameButton[]>("http://localhost:5000/api/games")
-      .then((reponse) => {
-        setGames(reponse.data);
-        setLoading(false);
-      });
+    axios.get<IGame[]>("http://localhost:5000/api/games").then((reponse) => {
+      setGames(reponse.data);
+      setLoading(false);
+    });
   }, []);
 
   return (

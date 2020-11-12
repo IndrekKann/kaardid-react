@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { RouteComponentProps } from "react-router";
 import {
   TextField,
   MenuItem,
@@ -9,8 +11,37 @@ import {
 } from "@material-ui/core";
 import Logo from "./Logo";
 import { theme } from "../theme";
+import { IGame } from "../interfaces/IGame";
 
-const JoinCreate: React.FC = () => {
+interface Props extends RouteComponentProps<{ gameName: string }> {}
+
+const defaultGame: IGame = {
+  id: "",
+  name: "",
+  image: "",
+  minPlayers: 0,
+  maxPlayers: 0,
+};
+
+const JoinCreate: React.FC<Props> = ({ match }) => {
+  const [loading, setLoading] = useState(true);
+  const [game, setGame] = useState(defaultGame);
+
+  useEffect(() => {
+    axios
+      .get<IGame>("http://localhost:5000/api/games/" + match.params.gameName)
+      .then((reponse) => {
+        setGame(reponse.data);
+        setLoading(false);
+      });
+  }, []);
+
+  const menuItems = [];
+  for (let i = game.minPlayers; i <= game.maxPlayers; i++) {
+    menuItems.push(i);
+  }
+
+  console.log(game);
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
@@ -35,12 +66,9 @@ const JoinCreate: React.FC = () => {
                       id="demo-simple-select-outlined"
                       variant="outlined"
                     >
-                      <MenuItem value={3}>3</MenuItem>
-                      <MenuItem value={4}>4</MenuItem>
-                      <MenuItem value={5}>5</MenuItem>
-                      <MenuItem value={6}>6</MenuItem>
-                      <MenuItem value={7}>7</MenuItem>
-                      <MenuItem value={8}>8</MenuItem>
+                      {menuItems.map((i) => (
+                        <MenuItem value={i}>{i}</MenuItem>
+                      ))}
                     </Select>
                   </li>
                   <br />

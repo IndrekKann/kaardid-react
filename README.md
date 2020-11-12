@@ -4,6 +4,8 @@ Card game website
 
 Libraries used:
 
-react-router-dom
-axios
-material-ui
+React Router DOM
+Axios
+Material-UI
+Formik
+JWT
