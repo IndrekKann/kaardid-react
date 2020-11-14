@@ -1,0 +1,9 @@
+.join-create-grid {
+  display: grid;
+  justify-content: center;
+  align-content: center;
+}
+
+.span-two {
+  grid-column: span 2;
+}

@@ -28,7 +28,7 @@ const GameButton: React.FC = () => {
               <tr>
                 {games.map((game) => (
                   <td key={game.id}>
-                    <Link to={`/game/${game.name}`}>
+                    <Link to={`/${game.name}`}>
                       <img
                         src={game.image}
                         className="Game-Icon"

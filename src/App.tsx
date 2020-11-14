@@ -10,7 +10,7 @@ function App() {
     <BrowserRouter>
       <Switch>
         <Route path="/" exact component={Index} />
-        <Route path="/game/:gameName" component={JoinCreate} />
+        <Route path="/:gameName" component={JoinCreate} />
         <Route path="/" component={NotFound} />
       </Switch>
     </BrowserRouter>

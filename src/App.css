@@ -48,7 +48,9 @@
   background-color: #7cebff;
   border: 25px solid #7cebff;
   border-radius: 50px;
-  margin: 50px;
+  margin: 1em;
+  height: 11.5em;
+  width: 20em;
 }
 
 .Game-Join-Create li {

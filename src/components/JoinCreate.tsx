@@ -3,16 +3,19 @@ import axios from "axios";
 import { RouteComponentProps } from "react-router";
 import { Formik, Form, Field } from "formik";
 import {
-  TextField,
   MenuItem,
   Select,
   Button,
   ThemeProvider,
+  Grid,
 } from "@material-ui/core";
 import Logo from "./Logo";
 import { theme } from "../theme";
 import { IGame } from "../interfaces/IGame";
 import LoadingSpinner from "./LoadingSpinner";
+import JoinCreateTextField from "../components/JoinCreateTextField";
+import "./JoinCreate.css";
+import ValidationSchema from "./validation/ValidationSchema";
 
 interface Props extends RouteComponentProps<{ gameName: string }> {}
 
@@ -53,36 +56,73 @@ const JoinCreate: React.FC<Props> = ({ match }) => {
             <Formik
               initialValues={{
                 name: "",
-                players: "",
+                players: game.minPlayers,
                 code: "",
               }}
-              onSubmit={(data) => {
+              validationSchema={ValidationSchema}
+              onSubmit={(data, { setSubmitting }) => {
+                setSubmitting(true);
+                // make async call
+                setSubmitting(false);
                 console.log("submit: ", data);
               }}
             >
-              {() => (
+              {({ isSubmitting }) => (
                 <Form>
-                  <div>
-                    <Field name="name" type="input" as={TextField} />
-                  </div>
-                  <div>
-                    <Field name="players" type="select" as={Select}>
-                      {menuItems.map((i) => (
-                        <MenuItem key={i} value={i}>
-                          {i}
-                        </MenuItem>
-                      ))}
-                    </Field>
-                    <Field name="code" type="input" as={TextField}></Field>
-                  </div>
-                  <div>
-                    <Button type="submit" variant="contained" color="primary">
-                      Create
-                    </Button>
-                    <Button type="submit" variant="contained" color="primary">
-                      Join
-                    </Button>
-                  </div>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                      NAME
+                    </Grid>
+                    <Grid item xs={12}>
+                      <JoinCreateTextField name="name" />
+                    </Grid>
+                    <br />
+                    <br />
+                    <Grid item xs={6}>
+                      PLAYERS
+                    </Grid>
+                    <Grid item xs={6}>
+                      CODE
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Field
+                        name="players"
+                        type="select"
+                        as={Select}
+                        variant="outlined"
+                        style={{ width: 223 }}
+                      >
+                        {menuItems.map((i) => (
+                          <MenuItem key={i} value={i}>
+                            {i}
+                          </MenuItem>
+                        ))}
+                      </Field>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <JoinCreateTextField name="code" />
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        variant="contained"
+                        color="primary"
+                      >
+                        Create
+                      </Button>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        variant="contained"
+                        color="primary"
+                      >
+                        Join
+                      </Button>
+                    </Grid>
+                  </Grid>
                 </Form>
               )}
             </Formik>
