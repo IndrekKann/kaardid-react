@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { RouteComponentProps } from "react-router";
+import { Formik, Form, Field } from "formik";
 import {
   TextField,
   MenuItem,
   Select,
   Button,
   ThemeProvider,
-  FormControl,
 } from "@material-ui/core";
 import Logo from "./Logo";
 import { theme } from "../theme";
 import { IGame } from "../interfaces/IGame";
+import LoadingSpinner from "./LoadingSpinner";
 
 interface Props extends RouteComponentProps<{ gameName: string }> {}
 
@@ -36,74 +37,57 @@ const JoinCreate: React.FC<Props> = ({ match }) => {
       });
   }, []);
 
-  const menuItems = [];
+  const menuItems: number[] = [];
   for (let i = game.minPlayers; i <= game.maxPlayers; i++) {
     menuItems.push(i);
   }
 
-  console.log(game);
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
         <Logo />
-        <div className="Game-Join-Create">
-          <h4>Your name</h4>
-          <TextField
-            required
-            id="outlined-required"
-            defaultValue=""
-            variant="outlined"
-          />
-          <table>
-            <td>
-              <ul>
-                <FormControl>
-                  <li>
-                    <h4>Players</h4>
-                    <Select
-                      style={{ width: 223 }}
-                      labelId="demo-simple-select-outlined-label"
-                      id="demo-simple-select-outlined"
-                      variant="outlined"
-                    >
+        {loading ? (
+          <LoadingSpinner />
+        ) : (
+          <div className="Game-Join-Create">
+            <Formik
+              initialValues={{
+                name: "",
+                players: "",
+                code: "",
+              }}
+              onSubmit={(data) => {
+                console.log("submit: ", data);
+              }}
+            >
+              {() => (
+                <Form>
+                  <div>
+                    <Field name="name" type="input" as={TextField} />
+                  </div>
+                  <div>
+                    <Field name="players" type="select" as={Select}>
                       {menuItems.map((i) => (
-                        <MenuItem value={i}>{i}</MenuItem>
+                        <MenuItem key={i} value={i}>
+                          {i}
+                        </MenuItem>
                       ))}
-                    </Select>
-                  </li>
-                  <br />
-                  <li>
-                    <Button variant="contained" color="primary">
-                      <b>CREATE</b>
+                    </Field>
+                    <Field name="code" type="input" as={TextField}></Field>
+                  </div>
+                  <div>
+                    <Button type="submit" variant="contained" color="primary">
+                      Create
                     </Button>
-                  </li>
-                </FormControl>
-              </ul>
-            </td>
-            <td>
-              <ul>
-                <FormControl>
-                  <li>
-                    <h4>Game code</h4>
-                    <TextField
-                      required
-                      id="outlined-required"
-                      defaultValue=""
-                      variant="outlined"
-                    />
-                  </li>
-                  <br />
-
-                  <li>
-                    <Button variant="contained" color="primary">
-                      <b>JOIN</b>
+                    <Button type="submit" variant="contained" color="primary">
+                      Join
                     </Button>
-                  </li>
-                </FormControl>
-              </ul>
-            </td>
-          </table>
-        </div>
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          </div>
+        )}
       </div>
     </ThemeProvider>
   );

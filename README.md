@@ -9,3 +9,4 @@ Axios
 Material-UI
 Formik
 JWT
+Yup

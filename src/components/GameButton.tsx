@@ -18,30 +18,32 @@ const GameButton: React.FC = () => {
   }, []);
 
   return (
-    <>
+    <div className="App">
       {loading ? (
         <LoadingSpinner />
       ) : (
-        <div className="App">
-          <ul className="games">
-            <table>
-              {games.map((game) => (
-                <Link to={`/game/${game.name}`}>
+        <ul className="games">
+          <table>
+            <tbody>
+              <tr>
+                {games.map((game) => (
                   <td key={game.id}>
-                    <img
-                      src={game.image}
-                      className="Game-Icon"
-                      alt={game.name}
-                    />
-                    <h3>{game.name}</h3>
+                    <Link to={`/game/${game.name}`}>
+                      <img
+                        src={game.image}
+                        className="Game-Icon"
+                        alt={game.name}
+                      />
+                      <h3>{game.name}</h3>
+                    </Link>
                   </td>
-                </Link>
-              ))}
-            </table>
-          </ul>
-        </div>
+                ))}
+              </tr>
+            </tbody>
+          </table>
+        </ul>
       )}
-    </>
+    </div>
   );
 };
 
