@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { RouteComponentProps } from "react-router";
+import { RouteComponentProps, Redirect } from "react-router";
 import { Formik, Form, Field } from "formik";
 import {
   MenuItem,
@@ -30,6 +30,8 @@ const defaultGame: IGame = {
 const JoinCreate: React.FC<Props> = ({ match }) => {
   const [loading, setLoading] = useState(true);
   const [game, setGame] = useState(defaultGame);
+  const [command, setCommand] = useState("");
+  const [response, setResponse] = useState("");
 
   useEffect(() => {
     axios
@@ -45,6 +47,10 @@ const JoinCreate: React.FC<Props> = ({ match }) => {
     menuItems.push(i);
   }
 
+  if (!!response) {
+    return <Redirect to={`/${match.params.gameName}/${response}`} />;
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <div className="App">
@@ -55,16 +61,28 @@ const JoinCreate: React.FC<Props> = ({ match }) => {
           <div className="Game-Join-Create">
             <Formik
               initialValues={{
+                game: match.params.gameName,
                 name: "",
                 players: game.minPlayers,
                 code: "",
+                command: command,
               }}
               validationSchema={ValidationSchema}
               onSubmit={(data, { setSubmitting }) => {
+                data.command = command;
                 setSubmitting(true);
-                // make async call
+                axios
+                  .post<string>("http://localhost:5000/api/activegames", {
+                    game: data.game,
+                    name: data.name,
+                    players: data.players,
+                    code: data.code,
+                    command: data.command,
+                  })
+                  .then((response) => {
+                    setResponse(response.data);
+                  });
                 setSubmitting(false);
-                console.log("submit: ", data);
               }}
             >
               {({ isSubmitting }) => (
@@ -105,6 +123,9 @@ const JoinCreate: React.FC<Props> = ({ match }) => {
                     <Grid item xs={6}>
                       <Button
                         type="submit"
+                        onClick={() => {
+                          setCommand("CREATE");
+                        }}
                         disabled={isSubmitting}
                         variant="contained"
                         color="primary"
@@ -115,6 +136,9 @@ const JoinCreate: React.FC<Props> = ({ match }) => {
                     <Grid item xs={6}>
                       <Button
                         type="submit"
+                        onClick={() => {
+                          setCommand("JOIN");
+                        }}
                         disabled={isSubmitting}
                         variant="contained"
                         color="primary"
